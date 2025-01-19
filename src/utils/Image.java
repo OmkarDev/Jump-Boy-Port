@@ -2,8 +2,7 @@ package utils;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.FileInputStream;
 
 import javax.imageio.ImageIO;
 
@@ -12,7 +11,7 @@ public class Image {
 	public static java.awt.Image createImage(String string) {
 		BufferedImage img = null;
 		try {
-			img = ImageIO.read(utils.Image.class.getResource("../"+string));
+			img = ImageIO.read(Utils.deepCopy(new FileInputStream(Utils.res_folder+string)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -23,7 +22,6 @@ public class Image {
 		if (anchor == 20 || anchor == 0) {
 			g.drawImage(img, x, y, null);
 		} else if (anchor == 17) {
-			// top | horizontal center
 			g.drawImage(img, x - (img.getWidth(null) / 2), y, null);
 		} else {
 			System.err.println("Anchor: " + anchor);

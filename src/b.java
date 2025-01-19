@@ -25,8 +25,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Random;
 
@@ -34,6 +34,8 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.JFrame;
+
+import utils.Utils;
 
 public final class b implements Runnable, KeyListener {
 	private Random a;
@@ -187,8 +189,8 @@ public final class b implements Runnable, KeyListener {
 		InputStream bg_music;
 		InputStream musicDie;
 		try {
-			bg_music = new FileInputStream(new File(getClass().getResource("music.mid").toURI()));
-			musicDie = new FileInputStream(new File(getClass().getResource("musicDie.mid").toURI()));
+			bg_music = Utils.deepCopy(new FileInputStream(Utils.res_folder + "/music.mid"));
+			musicDie = Utils.deepCopy(new FileInputStream(Utils.res_folder + "/musicDie.mid"));
 			musicBGStream = AudioSystem.getAudioInputStream(new BufferedInputStream(bg_music));
 			musicDieStream = AudioSystem.getAudioInputStream(new BufferedInputStream(musicDie));
 			bg_clip = AudioSystem.getClip();
@@ -524,7 +526,7 @@ public final class b implements Runnable, KeyListener {
 		try {
 			byte[] data = getBytesFromSave();
 			data[0] = ak;
-			FileOutputStream write_data = new FileOutputStream(new File("res/data/data.bin"));
+			FileOutputStream write_data = new FileOutputStream(new File(Utils.res_folder + "/data/data.bin"));
 			write_data.write(data);
 			write_data.close();
 		} catch (Exception e) {
@@ -545,7 +547,8 @@ public final class b implements Runnable, KeyListener {
 	private static boolean d() {
 		DataInputStream data;
 		try {
-			data = new DataInputStream(new BufferedInputStream(new FileInputStream(new File("res/data/data.bin"))));
+			InputStream stream = new FileInputStream(new File(Utils.res_folder + "/data/data.bin"));
+			data = new DataInputStream(stream);
 			byte b = getBytesFromSave()[0];
 			if (b == (byte) 0xFF) {
 				return false;
@@ -671,11 +674,11 @@ public final class b implements Runnable, KeyListener {
 			}
 		}
 	}
-	
+
 	public static byte[] getBytesFromSave() {
 		byte[] data = null;
 		try {
-			data = Files.readAllBytes(Paths.get(b.class.getResource("/data/data.bin").toURI()));
+			data = Files.readAllBytes(Paths.get(Utils.res_folder+"/data/data.bin"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1140,21 +1143,26 @@ public final class b implements Runnable, KeyListener {
 	}
 
 	public final void run() {
-		while (b.canRun) {
-			try {
-				this.render();
-				this.bw = 60L - (System.currentTimeMillis() - this.bv);
-				if (this.bw <= 0L) {
-					this.bw = 15L;
+		try {
+			while (b.canRun) {
+				try {
+					this.render();
+					this.bw = 60L - (System.currentTimeMillis() - this.bv);
+					if (this.bw <= 0L) {
+						this.bw = 15L;
+					}
+					Thread.sleep(this.bw);
+					this.bv = System.currentTimeMillis();
+				} catch (Exception ex) {
+					ex.printStackTrace();
 				}
-				Thread.sleep(this.bw);
-				this.bv = System.currentTimeMillis();
-			} catch (Exception ex) {
-				ex.printStackTrace();
 			}
-		}
-		if (rocket.a != null) {
-			rocket.a.destroyApp(true);
+			if (rocket.a != null) {
+				rocket.a.destroyApp(true);
+				System.exit(0);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 			System.exit(0);
 		}
 	}
@@ -1422,7 +1430,7 @@ public final class b implements Runnable, KeyListener {
 
 	private void saveNewScore(final int newScore) {
 		try {
-			File file = new File("res/data/data.bin");
+			File file = new File(Utils.res_folder+"/data/data.bin");
 			byte[] data = getBytesFromSave();
 			for (int index = 0; index < 5; index++) {
 				int offset = 2 + 4 * index;
@@ -1895,7 +1903,7 @@ public final class b implements Runnable, KeyListener {
 			if (level_no > a.levels_reached) {
 				a.levels_reached = level_no;
 				try {
-					File file = new File("res/data/data.bin");
+					File file = new File(Utils.res_folder+"/data/data.bin");
 					byte[] data = getBytesFromSave();
 					data[1] = (byte) a.levels_reached;
 					FileOutputStream writeFile = new FileOutputStream(file);
