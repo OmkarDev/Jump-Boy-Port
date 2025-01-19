@@ -1,6 +1,10 @@
 # Jump-Boy-Port
 Jump Boy Game Port In Modern Java
 
+Keys:
+Left, Right, Up, Down Arrow Keys  
+Q, W
+
 [Youtube Video](https://www.youtube.com/watch?v=P-g7jtyrMc8)
 
 `the code was decompiled and made purely to run (honestly does bare minimum of that even)`  
@@ -10,4 +14,3 @@ Jump Boy Game Port In Modern Java
 
 ### TODO:
 fix the whole sound issue  
-build it to jar file  
