@@ -1,6 +1,16 @@
 # Jump-Boy-Port
 Jump Boy Game Port In Modern Java
 
+### Community continuation
+
+An independent continuation of this project adds a Windows build and a
+touch-friendly browser version:
+
+- [Rocket Jump Boy Legacy source](https://github.com/stojangb/rocket-jump-boy-legacy)
+- [Play the browser version](https://stojangb.github.io/rocket-jump-boy-legacy/)
+
+This is a community project and is not an official release.
+
 Keys:
 Left, Right, Up, Down Arrow Keys  
 Q, W
